@@ -3,16 +3,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-def add_noise(data, amount):
-        data += amount * np.random.randn(len(data))
-        print(data)
-        return data
+def add_noise(data, noise):
+    """Add random uniform noise to the existing waveform."""
+    data += noise * np.random.randn(len(data))
+
+    return data
     
-def see_waveform(file, noise, amount):
+def see_waveform(file, noise):
+    """Plots raw waveform data with respect to time."""
     signal, sr = librosa.load(file)
     signal = signal[-sr:]
     if noise:
-        signal = add_noise(signal, amount)
+        signal = add_noise(signal, noise)
     
     name = file.split('/')[-1]
     
@@ -22,11 +24,12 @@ def see_waveform(file, noise, amount):
     plt.ylabel('Amplitude')
     plt.show()
 
-def see_fourier_transform(file, noise, amount, log=False, sr=22050):
+def see_fourier_transform(file, noise, log=False, sr=22050):
+    """Plots FFT transformed data."""
     signal, sr = librosa.load(file)
     signal = signal[-sr:]
     if noise:
-        signal = add_noise(signal, amount)
+        signal = add_noise(signal, noise)
         
     name = file.split('/')[-1]
     
@@ -50,11 +53,12 @@ def see_fourier_transform(file, noise, amount, log=False, sr=22050):
     plt.ylabel('Magnitude')
     plt.show()
 
-def see_spectrogram(file, noise, amount, log=True, sr=22050, n_fft=2048, hop_length=512):
+def see_spectrogram(file, noise, log=True, sr=22050, n_fft=2048, hop_length=512):
+    """Plots spectrogram of the waveform data after the FFT."""
     signal, sr = librosa.load(file)
     signal = signal[-sr:]
     if noise:
-        signal = add_noise(signal, amount)
+        signal = add_noise(signal, noise)
         
     name = file.split('/')[-1]
     
@@ -76,11 +80,12 @@ def see_spectrogram(file, noise, amount, log=True, sr=22050, n_fft=2048, hop_len
     plt.colorbar()
     plt.show()
 
-def see_mfcc(file, noise, amount, sr=22050, n_fft=2048, hop_length=512):
+def see_mfcc(file, noise, sr=22050, n_fft=2048, hop_length=512):
+    """Plots MFCC matrix after all components of the transform have occured."""
     signal, sr = librosa.load(file)
     signal = signal[-sr:]
     if noise:
-        signal = add_noise(signal, amount)
+        signal = add_noise(signal, noise)
         
     name = file.split('/')[-1]
     
@@ -93,11 +98,12 @@ def see_mfcc(file, noise, amount, sr=22050, n_fft=2048, hop_length=512):
     plt.colorbar()
     plt.show()
     
-def visualize_all(file, noise=True, amount=0.001):
+def visualize_all(file, noise=0):
+    """Plots waveform between all stages of the preprocessing."""
     plt.style.use('ggplot')
-    see_waveform(file, noise, amount)
-    see_fourier_transform(file, noise, amount)
-    see_fourier_transform(file, noise, amount, log=True)
-    see_spectrogram(file, noise, amount, log=False)
-    see_spectrogram(file, noise, amount)
-    see_mfcc(file, noise, amount)
+    see_waveform(file, noise)
+    see_fourier_transform(file, noise)
+    see_fourier_transform(file, noise, log=True)
+    see_spectrogram(file, noise, log=False)
+    see_spectrogram(file, noise)
+    see_mfcc(file, noise)
