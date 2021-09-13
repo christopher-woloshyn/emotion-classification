@@ -1,3 +1,4 @@
-data/
+data/TESS/
+data/TESS_other/
 src/__pycache__/
 src/.ipynb_checkpoints
